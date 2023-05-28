@@ -1,0 +1,8 @@
+## Interface: 100100
+## Title: AutoKeyLister
+## Author: Curse
+## Version: 0.0.1
+## Dependencies: Details
+AutoKeyLister.lua
+
+

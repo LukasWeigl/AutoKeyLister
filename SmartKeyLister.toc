@@ -1,6 +1,0 @@
-## Interface: 100100
-## Title: SmartKeyLister
-## Author: Curse
-## Version: 0.0.1
-## Dependencies: Blizzard_GroupFinder
-SmartKeyLister.lua
