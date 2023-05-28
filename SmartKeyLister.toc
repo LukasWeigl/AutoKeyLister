@@ -1,6 +1,6 @@
 ## Interface: 100100
-## Title: MacroShare
+## Title: SmartKeyLister
 ## Author: Curse
 ## Version: 0.0.1
-## Dependencies: Blizzard_MacroUI
+## Dependencies: Blizzard_GroupFinder
 SmartKeyLister.lua
