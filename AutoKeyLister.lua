@@ -1,11 +1,8 @@
-local keystoneTable = {} -- Define the keystoneTable outside the function to make it accessible
+local numRows = 0
+local rows = {} -- Keep track of the created rows
+local keystoneTable = {}
 
-local function ClearTableData()
-    numRows = 0
-    for i = 1, #keystoneTable do
-        keystoneTable[i] = nil
-    end
-end
+
 
 -- Create the main addon frame
 local autoKeyListerFrame = CreateFrame("Frame", "AutoKeyListerFrame", PVEFrame,
@@ -14,15 +11,9 @@ autoKeyListerFrame:SetSize(220, 100)
 autoKeyListerFrame:SetPoint("BOTTOMLEFT", PVEFrame, "BOTTOMRIGHT", -220, -100)
 autoKeyListerFrame:SetBackdropColor(DARKGRAY_COLOR:GetRGBA())
 
-local tableFrame = CreateFrame("Frame", nil, autoKeyListerFrame)
-tableFrame:SetSize(200, 80)
-tableFrame:SetPoint("CENTER", autoKeyListerFrame, "CENTER")
-
-local numRows = 0
-
 local function AddRowToTable(rowData)
-    local row = CreateFrame("Frame", nil, tableFrame)
-    row:SetSize(200, 20)
+    local row = CreateFrame("Frame", nil, autoKeyListerFrame)
+    row:SetSize(190, 30)
     row:SetPoint("TOP", 0, -numRows * 20)
 
     for i, data in ipairs(rowData) do
@@ -32,7 +23,30 @@ local function AddRowToTable(rowData)
     end
 
     numRows = numRows + 1
+
+    rows[numRows] = row -- Store the row in the rows table
 end
+
+local function ClearTableFrame()
+    for i = 1, numRows do
+        local row = rows[i]
+        if row then
+            row:Hide() -- Hide the row
+            row:SetParent(nil) -- Remove the parent
+
+            -- Clear the row's cells
+            for j = 1, row:GetNumChildren() do
+                local cell = select(j, row:GetChildren())
+                cell:SetText("")
+            end
+        end
+    end
+
+    numRows = 0
+    rows = {}
+end
+
+
 
 local function importKeys()
     local openRaidLib = LibStub:GetLibrary("LibOpenRaid-1.0")
@@ -45,8 +59,7 @@ local function importKeys()
     keystoneData = openRaidLib.GetAllKeystonesInfo()
 
     if keystoneData then
-        ClearTableData()
-
+        ClearTableFrame()
         for unitName, keystoneInfo in pairs(keystoneData) do
             local keystoneRow = {
                 unitName,
@@ -77,7 +90,7 @@ dungeonsFrame:SetScript("OnEvent", function(self, event, addonName)
         end)
 
         lfgFrame:SetScript("OnHide", function()
-            ClearTableData() -- Clear the keystoneTable data when the frame is hidden
+            ClearTableFrame() -- Clear the keystoneTable data when the frame is hidden
         end)
     end
 end)
